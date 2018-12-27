@@ -17,7 +17,6 @@ public class ExpoHall implements Serializable{
     public ExpoHall() {
     }
 
-
     public ExpoHall(Integer hallId, String name, GregorianCalendar bookedFrom, GregorianCalendar bookedTo,
                     Boolean isAvailable, Integer freePlaces) {
         this.hallId = hallId;
