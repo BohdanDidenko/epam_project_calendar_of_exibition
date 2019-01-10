@@ -1,8 +1,6 @@
 package com.calendarofexibition.persistence.interfaces;
 
 import com.calendarofexibition.model.entity.Event;
-
-import java.util.LinkedList;
 import java.util.List;
 
 public interface EventDAO {

@@ -1,11 +1,7 @@
 package com.calendarofexibition.controller;
 
 import com.calendarofexibition.controller.commands.Command;
-import com.calendarofexibition.controller.commands.impl.*;
-import javax.servlet.http.HttpServletRequest;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import com.calendarofexibition.controller.commands.impl.*;import java.util.HashMap;
 import java.util.Map;
 
 public class ControllerHelper {
@@ -17,6 +13,7 @@ public class ControllerHelper {
         commandsMap.put("events", new GetAllEventsPageCommand());
         commandsMap.put("profile", new ConsumerPageCommand());
         commandsMap.put("login", new LoginCommand());
+        commandsMap.put("logout", new LogoutCommand());
         commandsMap.put("loginPage", new LoginPageCommand());
         commandsMap.put("regPage", new RegistrationPageCommand());
         commandsMap.put("reg", new RegistrationCommand());

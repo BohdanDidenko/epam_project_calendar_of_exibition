@@ -23,6 +23,14 @@ public class BuyTicketCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws RegistrationException, ServletException, IOException {
+
+        HttpSession session = req.getSession(false);
+        User user = (User)session.getAttribute("user");
+
+        if (user == null) {
+            return PagesManager.getProperty("path.page.loginPage");
+        }
+        Integer consumerId = user.getId();
         Event event =  new Event();
         EventService eventService = ServiceFactory.getInstance().getEventService();
         OrderService orderService = ServiceFactory.getInstance().getOrderService();
@@ -33,12 +41,10 @@ public class BuyTicketCommand implements Command {
         Ticket ticket = new Ticket();
         ticket.setKey(new KeyGenerator().getKey());
         ticket.setEvent(event);
-        int ticketId = orderService.createTicket(ticket);
-        ticket.setTicketId(ticketId);
+        orderService.createTicket(ticket);
 
-        HttpSession session = req.getSession(false);
-        User user = (User)session.getAttribute("user");
-        Integer consumerId = user.getId();
+        int ticketId = orderService.getTicketIdByTicket(ticket);
+        ticket.setTicketId(ticketId);
 
         Consumer consumer;
         consumer = consumerService.getConsumer(consumerId);

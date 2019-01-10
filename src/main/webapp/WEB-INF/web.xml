@@ -19,6 +19,7 @@
         <url-pattern>/profile</url-pattern>
         <url-pattern>/reg</url-pattern>
         <url-pattern>/buyTicket</url-pattern>
+        <url-pattern>/logout</url-pattern>
     </servlet-mapping>
 
     <filter>

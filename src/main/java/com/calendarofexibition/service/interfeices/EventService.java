@@ -1,7 +1,6 @@
 package com.calendarofexibition.service.interfeices;
 
 import com.calendarofexibition.model.entity.Event;
-import java.util.LinkedList;
 import java.util.List;
 
 /**

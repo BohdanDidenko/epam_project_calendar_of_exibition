@@ -8,6 +8,7 @@ import com.calendarofexibition.util.PagesManager;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 public class ConsumerPageCommand implements Command {
     @Override
@@ -15,6 +16,8 @@ public class ConsumerPageCommand implements Command {
         EventService eventService = ServiceFactory.getInstance().getEventService();
         HttpSession session = req.getSession(false);
         User user = (User)session.getAttribute("user");
+
+
 
         if(user != null && user.getRole().equals("consumer")){
             return PagesManager.getProperty("path.page.consumerPage");
@@ -25,7 +28,6 @@ public class ConsumerPageCommand implements Command {
         }
 
         else {
-            System.out.println("loginPage");
             return PagesManager.getProperty("path.page.loginPage");
         }
     }

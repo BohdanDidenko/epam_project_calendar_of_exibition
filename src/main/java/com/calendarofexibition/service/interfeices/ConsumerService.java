@@ -2,7 +2,6 @@ package com.calendarofexibition.service.interfeices;
 
 import com.calendarofexibition.model.entity.Consumer;
 import com.calendarofexibition.model.entity.User;
-import java.sql.SQLException;
 
 public interface ConsumerService {
 

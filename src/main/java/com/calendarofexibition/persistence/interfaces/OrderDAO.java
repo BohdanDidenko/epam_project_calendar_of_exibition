@@ -1,14 +1,27 @@
 package com.calendarofexibition.persistence.interfaces;
 
-
 import com.calendarofexibition.model.Order;
 import com.calendarofexibition.model.Ticket;
 import com.calendarofexibition.model.entity.Consumer;
 import com.calendarofexibition.model.entity.Event;
-
 import java.util.List;
 
 public interface OrderDAO {
+
+    /**
+     * Get all consumer's tickets
+     * @return list of tickets for special consumer
+     */
+
+    List<Ticket> getAllTicketsForConsumer();
+
+    /**
+     * Get ticket's id by ticket
+     * @param ticket ticket
+     * @return ticket's id
+     */
+    Integer getTicketIdByTicket(Ticket ticket);
+
 
     /**
      * Create new Order in database

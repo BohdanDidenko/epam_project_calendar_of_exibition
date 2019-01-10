@@ -6,6 +6,8 @@ import com.calendarofexibition.persistence.implementation.OrderDAOImpl;
 import com.calendarofexibition.persistence.interfaces.OrderDAO;
 import com.calendarofexibition.service.interfeices.OrderService;
 
+import java.util.List;
+
 public class OrderServiceImpl implements OrderService {
 
     OrderDAO orderDAO = OrderDAOImpl.getInstance();
@@ -19,5 +21,17 @@ public class OrderServiceImpl implements OrderService {
     public int createTicket(Ticket ticket) {
 
         return orderDAO.createTicket(ticket);
+    }
+
+    @Override
+    public int getTicketIdByTicket(Ticket ticket) {
+
+        return orderDAO.getTicketIdByTicket(ticket);
+    }
+
+    @Override
+    public List<Ticket> getAllTicketsForConsumer() {
+
+        return null;
     }
 }

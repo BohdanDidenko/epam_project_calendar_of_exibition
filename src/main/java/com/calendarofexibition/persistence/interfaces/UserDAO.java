@@ -3,8 +3,6 @@ package com.calendarofexibition.persistence.interfaces;
 import com.calendarofexibition.model.entity.Consumer;
 import com.calendarofexibition.model.entity.User;
 
-import java.sql.SQLException;
-
 /**
  * User Data Access Object interface
  */

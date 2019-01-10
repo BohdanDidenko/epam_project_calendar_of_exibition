@@ -1,7 +1,6 @@
 package com.calendarofexibition.persistence.interfaces;
 
 import com.calendarofexibition.model.ExpoHall;
-
 import java.util.List;
 
 public interface ExpoHallDAO {

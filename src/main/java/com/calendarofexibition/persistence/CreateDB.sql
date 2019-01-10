@@ -130,3 +130,9 @@ COMMIT;
 
 SELECT * FROM users WHERE UserLogin  = ? and UserPassword  = ?;
 SELECT * FROM users WHERE UserLogin = ? and UserPassword = ?;
+
+INSERT INTO orders (consumerId, ticketId) VALUES (?,?);
+INSERT INTO tickets (key, eventId) VALUES (?, ?);
+INSERT INTO `calendarofexposition`.`tickets` (`key`, `eventId`) VALUES (?,?)
+
+SELECT tikcetId FROM tickets WHERE tickets.key = ?
