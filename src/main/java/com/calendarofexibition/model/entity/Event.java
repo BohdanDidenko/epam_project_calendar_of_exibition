@@ -12,12 +12,14 @@ public class Event implements Serializable {
     private GregorianCalendar endDate;
     private Double price;
     private String pathToPicture;
+    private boolean isActive;
 
     public Event() {
     }
 
     public Event(int eventId, String title, String theme, String description,
-                 GregorianCalendar startDate, GregorianCalendar endDate, Double price, String pathToPicture) {
+                 GregorianCalendar startDate, GregorianCalendar endDate,
+                 Double price, String pathToPicture, boolean isActive) {
         this.eventId = eventId;
         this.title = title;
         this.theme = theme;
@@ -26,6 +28,15 @@ public class Event implements Serializable {
         this.endDate = endDate;
         this.price = price;
         this.pathToPicture = pathToPicture;
+        this.isActive = isActive;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
     }
 
     public int getEventId() {
@@ -135,6 +146,7 @@ public class Event implements Serializable {
                 ", endDate=" + endDate +
                 ", price=" + price +
                 ", pathToPicture='" + pathToPicture + '\'' +
+                ",isActive='" + isActive + '\'' +
                 '}';
     }
 }

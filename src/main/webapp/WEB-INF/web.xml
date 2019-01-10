@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+    id="com.calendarofexibition" version="3.0">
+    
+    <display-name>com.calendarofexibition</display-name>
+    <display-name>Exposition Calendar</display-name>
+    <servlet>
+        <servlet-name>Controller</servlet-name>
+        <servlet-class>com.calendarofexibition.controller.Controller</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>Controller</servlet-name>
+        <url-pattern>/index</url-pattern>
+        <url-pattern>/events</url-pattern>
+        <url-pattern>/login</url-pattern>
+        <url-pattern>/regpage</url-pattern>
+        <url-pattern>/profile</url-pattern>
+        <url-pattern>/reg</url-pattern>
+        <url-pattern>/buyTicket</url-pattern>
+    </servlet-mapping>
+
+    <filter>
+        <filter-name>Logger</filter-name>
+        <filter-class>com.calendarofexibition.controller.filters.LoggerFilter</filter-class>
+        <init-param>
+            <param-name>MAIN_PATH</param-name>
+            <param-value>/main</param-value>
+        </init-param>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>Logger</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <error-page>
+        <!-- Missing login -->
+        <error-code>401</error-code>
+        <location>/WEB-INF/jsp/error.jsp</location>
+    </error-page>
+    <error-page>
+        <!-- Forbidden directory listing -->
+        <error-code>403</error-code>
+        <location>/WEB-INF/jsp/error.jsp</location>
+    </error-page>
+    <error-page>
+        <!-- Missing resource -->
+        <error-code>404</error-code>
+        <location>/WEB-INF/jsp/error.jsp</location>
+    </error-page>
+    <error-page>
+        <!-- Uncaught exception -->
+        <error-code>500</error-code>
+        <location>/WEB-INF/jsp/error.jsp</location>
+    </error-page>
+    <error-page>
+        <!-- Unsupported servlet method -->
+        <error-code>503</error-code>
+        <location>/WEB-INF/jsp/error.jsp</location>
+    </error-page>
+</web-app>

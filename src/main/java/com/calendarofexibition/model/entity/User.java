@@ -7,15 +7,23 @@ public abstract class User implements Serializable {
     private String role;
     private String login;
     private String password;
+    private Boolean isAvailable;
 
     public User() {
     }
 
-    public User(Integer id, String role, String login, String password) {
+    public User(Integer id, String role, String login, String password, Boolean isAvailable) {
         this.id = id;
         this.role = role;
         this.login = login;
         this.password = password;
+        this.isAvailable = isAvailable;
+    }
+    public User(String role, String login, String password, Boolean isAvailable) {
+        this.role = role;
+        this.login = login;
+        this.password = password;
+        this.isAvailable = isAvailable;
     }
 
     public Integer getId() {
@@ -50,6 +58,15 @@ public abstract class User implements Serializable {
         this.password = password;
     }
 
+    public Boolean getAvailable() {
+        return isAvailable;
+    }
+
+    public void setAvailable(Boolean available) {
+        isAvailable = available;
+    }
+
+    // todo override this method
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -64,6 +81,7 @@ public abstract class User implements Serializable {
         return getPassword() != null ? getPassword().equals(user.getPassword()) : user.getPassword() == null;
     }
 
+    // todo override this method
     @Override
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
@@ -73,6 +91,7 @@ public abstract class User implements Serializable {
         return result;
     }
 
+    // todo override this method
     @Override
     public String toString() {
         return this.getClass().getSimpleName() + "{" +

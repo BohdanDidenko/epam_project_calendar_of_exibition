@@ -1,8 +1,6 @@
 package com.calendarofexibition.model;
 
 import com.calendarofexibition.model.entity.Consumer;
-import com.calendarofexibition.model.entity.Event;
-import com.calendarofexibition.model.entity.Ticket;
 
 import java.io.Serializable;
 
@@ -14,11 +12,19 @@ public class Order implements Serializable {
     public Order() {
     }
 
-    public Order(Integer orderId, Consumer consumer, Ticket ticket) {
+    public Order(Consumer consumer, Ticket ticket) {
+        this.consumer = consumer;
+        this.ticket = ticket;
+    }
+
+    public Order(Integer orderId, Consumer consumer,
+                 Ticket ticket) {
         OrderId = orderId;
         this.consumer = consumer;
         this.ticket = ticket;
     }
+
+
 
     public Integer getOrderId() {
         return OrderId;
@@ -26,6 +32,14 @@ public class Order implements Serializable {
 
     public void setOrderId(Integer orderId) {
         this.OrderId = orderId;
+    }
+
+    public Ticket getTicket() {
+        return ticket;
+    }
+
+    public void setTicket(Ticket ticket) {
+        this.ticket = ticket;
     }
 
     public String getName() {
@@ -42,6 +56,26 @@ public class Order implements Serializable {
 
     public String getEmail() {
         return consumer.getEmail();
+    }
+
+    public Double getPrice (){
+        return ticket.getPrice();
+    }
+
+    public String getTitle() {
+        return ticket.getTitle();
+    }
+
+    public String getThema (){
+        return ticket.getTheme();
+    }
+
+    public Integer getConsumerId() {
+        return consumer.getId();
+    }
+
+    public Integer getTicketId() {
+        return ticket.getTicketId();
     }
 
     @Override
@@ -71,6 +105,8 @@ public class Order implements Serializable {
                 ", consumerSurname=" + consumer.getSurname() +
                 ", consumerPhoneNumber=" + consumer.getPhoneNumber() +
                 ", consumerEmail=" + consumer.getEmail() +
+                ", price=" + ticket.getPrice() +
+                ", title=" + ticket.getTitle() +
                 '}';
     }
 }

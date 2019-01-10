@@ -3,7 +3,6 @@ package com.calendarofexibition.model;
 import com.calendarofexibition.model.entity.Event;
 import java.io.Serializable;
 import java.util.GregorianCalendar;
-import java.util.List;
 
 public class ExpoHall implements Serializable{
     private Integer hallId;
@@ -12,23 +11,13 @@ public class ExpoHall implements Serializable{
     private GregorianCalendar bookedTo;
     private Boolean isAvailable;
     private Integer freePlaces;
-    private List<Event> event;
+    private Event event;
 
     public ExpoHall() {
     }
 
     public ExpoHall(Integer hallId, String name, GregorianCalendar bookedFrom, GregorianCalendar bookedTo,
-                    Boolean isAvailable, Integer freePlaces) {
-        this.hallId = hallId;
-        this.name = name;
-        this.bookedFrom = bookedFrom;
-        this.bookedTo = bookedTo;
-        this.isAvailable = isAvailable;
-        this.freePlaces = freePlaces;
-    }
-
-    public ExpoHall(Integer hallId, String name, GregorianCalendar bookedFrom, GregorianCalendar bookedTo,
-                    Boolean isAvailable, Integer freePlaces, List<Event> event) {
+                    Boolean isAvailable, Integer freePlaces, Event event) {
         this.hallId = hallId;
         this.name = name;
         this.bookedFrom = bookedFrom;

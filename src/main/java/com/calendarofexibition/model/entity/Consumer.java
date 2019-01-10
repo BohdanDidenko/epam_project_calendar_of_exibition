@@ -3,23 +3,55 @@ package com.calendarofexibition.model.entity;
 public class Consumer extends User{
     private String name;
     private String surname;
-    private String email;
-    private String phoneNumber;
     private Double spentMoney;
     private Double discount;
+    private String email;
+    private String phoneNumber;
+
 
     public Consumer() {
     }
 
-    public Consumer(Integer id, String role, String login, String password, String name,
-                    String surname, String email, String phoneNumber, Double spentMoney, Double discount) {
-        super(id, role, login, password);
+    public Consumer(Integer id, String role, String login, String password, Boolean isAvailable, String name,
+                    String surname, Double spentMoney, Double discount, String email, String phoneNumber) {
+        super(id, role, login, password, isAvailable);
         this.name = name;
         this.surname = surname;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
         this.spentMoney = spentMoney;
         this.discount = discount;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+    }
+
+    public Consumer(String role, String login, String password, Boolean isAvailable, String name, String surname,
+                    Double spentMoney, Double discount, String email, String phoneNumber) {
+        super(role, login, password, isAvailable);
+        this.name = name;
+        this.surname = surname;
+        this.spentMoney = spentMoney;
+        this.discount = discount;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+    }
+
+    @Override
+    public Integer getId() {
+        return super.getId();
+    }
+
+    @Override
+    public void setId(Integer id) {
+        super.setId(id);
+    }
+
+    @Override
+    public String getLogin() {
+        return super.getLogin();
+    }
+
+    @Override
+    public String getPassword() {
+        return super.getPassword();
     }
 
     public String getName() {
