@@ -18,10 +18,10 @@
     <label for="name">Name:</label>
     <input id="name" type="text" name="name" size="20">
     <br>
-    <label for="surname">User name:</label>
+    <label for="surname">Surname:</label>
     <input id="surname" type="text" name="surname" size="20">
     <br>
-    <label for="login">User name:</label>
+    <label for="login">Login:</label>
     <input id="login" type="text" name="login" size="20">
     <br>
     <label for="password">Password </label>

@@ -8,10 +8,24 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class ExpoHallDAOImpl implements ExpoHallDAO {
+    private static volatile ExpoHallDAOImpl instance;
+    private static FactoryConnection factoryConnection;
     private final static Logger LOGGER = Logger.getLogger(UserDAOImpl.class);
     private static final String GET_ALL_ExpoHall = "SELECT * FROM expohalls";
     private static final String UPDATE_EVENT = "UPDATE expohalls SET hallId, name, isAvailable, freePlaces (?, ?, ?, ?)";
-    private FactoryConnection factoryConnection;
+
+    private ExpoHallDAOImpl() { factoryConnection = FactoryConnection.getInstance();}
+
+    public static ExpoHallDAOImpl getInstance() {
+        if (instance == null) {
+            synchronized (ExpoHallDAOImpl.class){
+                if(instance == null){
+                    instance = new ExpoHallDAOImpl();
+                }
+            }
+        }
+        return instance;
+    }
 
     @Override
     public List<com.calendarofexibition.model.ExpoHall> findAllHalls() {

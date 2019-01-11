@@ -6,17 +6,16 @@ import com.calendarofexibition.model.entity.Consumer;
 import com.calendarofexibition.model.entity.Event;
 import com.calendarofexibition.persistence.interfaces.OrderDAO;
 import org.apache.log4j.Logger;
-
 import java.sql.*;
-import java.util.GregorianCalendar;
 import java.util.LinkedList;
 import java.util.List;
 
 public class OrderDAOImpl implements OrderDAO {
-private FactoryConnection factoryConnection;
     private static volatile OrderDAOImpl instance;
+    private static FactoryConnection factoryConnection;
     private final static Logger LOGGER = Logger.getLogger(OrderDAOImpl.class);
-    private static final String GET_ALL_TICKETS = "SELECT * FROM tickets WHERE eventId IN ()";
+    private static final String GET_ALL_TICKETS_BY_CONSUMER = "SELECT * FROM tickets WHERE ticketId IN" +
+            " (SELECT ticketId FROM orders WHERE consumerId = ?)";
     private static final String CREATE_ORDER = "INSERT INTO `calendarofexposition`.`orders` (consumerId, ticketId) VALUES (?,?)";
     private static final String GET_ALL_ORDERS = "SELECT * FROM orders";
     private static final String GET_ORDER_BY_CONSUMER_ID = "SELECT * FROM orders WHERE ConsumerId = ?";
@@ -40,12 +39,13 @@ private FactoryConnection factoryConnection;
     }
 
     @Override
-    public List<Ticket> getAllTicketsForConsumer() {
+    public List<Ticket> getAllTicketsForConsumer(Integer consumerId) {
         List<Ticket> list = new LinkedList<>();
         Ticket ticket;
         try (Connection connection = factoryConnection.getConnection();
-             PreparedStatement psEvent = connection.prepareStatement(GET_ALL_TICKETS)) {
-            ResultSet rs = psEvent.executeQuery();
+             PreparedStatement ps = connection.prepareStatement(GET_ALL_TICKETS_BY_CONSUMER)) {
+            ps.setInt(1, consumerId);
+            ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 ticket = buildTicket(rs);
                 list.add(ticket);
@@ -53,24 +53,24 @@ private FactoryConnection factoryConnection;
         } catch (SQLException e) {
             LOGGER.error("SQLException was occurred in " + getClass().getSimpleName(), e);
         }
-        LOGGER.info("All events was received from DB");
+        LOGGER.info("All tickets by consumer were received from DB");
         return list;
     }
 
     @Override
     public Integer createOrder(Order order) {
         Integer orderId = -1;
-            try (Connection connection = factoryConnection.getConnection();
-                 PreparedStatement ps = connection.prepareStatement(CREATE_ORDER)) {
-                ps.setInt(1, order.getConsumerId());
-                System.out.println("ticketId: " + order.getTicket().getTicketId());
-                ps.setInt(2, order.getTicket().getTicketId());
-                        ps.executeUpdate();
-            } catch (SQLException e) {
-                LOGGER.error("SQLException was occurred in " + getClass().getSimpleName(), e);
-            }
-            LOGGER.info("List of Events by theme was received from DB");
-            return orderId;
+        try (Connection connection = factoryConnection.getConnection();
+             PreparedStatement ps = connection.prepareStatement(CREATE_ORDER)) {
+            ps.setInt(1, order.getConsumerId());
+            System.out.println("ticketId: " + order.getTicket().getTicketId());
+            ps.setInt(2, order.getTicket().getTicketId());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            LOGGER.error("SQLException was occurred in " + getClass().getSimpleName(), e);
+        }
+        LOGGER.info("List of Events by theme were received from DB");
+        return orderId;
     }
 
     @Override
@@ -80,13 +80,13 @@ private FactoryConnection factoryConnection;
              PreparedStatement ps = connection.prepareStatement(GET_TICKETID_BY_KEY)) {
             ps.setString(1, ticket.getKey());
             ResultSet rs = ps.executeQuery();
-                if (rs.next()) {
-                    ticketId = rs.getInt(1);
-                }
+            if (rs.next()) {
+                ticketId = rs.getInt(1);
+            }
         } catch (SQLException e) {
             LOGGER.error("SQLException was occurred in " + getClass().getSimpleName(), e);
         }
-        LOGGER.info("List of Events by theme was received from DB");
+        LOGGER.info("List of Events by theme were received from DB");
         return ticketId;
     }
 
@@ -99,11 +99,11 @@ private FactoryConnection factoryConnection;
             ps.setString(1, ticket.getKey());
             ps.setInt(2, ticket.getEvent().getEventId());
 
-                    ps.executeUpdate();
+            ps.executeUpdate();
         } catch (SQLException e) {
             LOGGER.error("SQLException was occurred in " + getClass().getSimpleName(), e);
         }
-        LOGGER.info("List of Events by theme was received from DB");
+        LOGGER.info("List of Events by theme were received from DB");
         return ticketId;
     }
 
@@ -131,7 +131,9 @@ private FactoryConnection factoryConnection;
         Ticket ticket = new Ticket();
         ticket.setTicketId(rs.getInt(1));
         ticket.setKey(rs.getString(2));
-        ticket.getEvent().setEventId(rs.getInt(3));
+        Event event = new Event();
+        event.setEventId(rs.getInt(3));
+        ticket.setEvent(event);
         return ticket;
     }
 }

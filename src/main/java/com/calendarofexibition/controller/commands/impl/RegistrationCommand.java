@@ -1,7 +1,6 @@
 package com.calendarofexibition.controller.commands.impl;
 
 import com.calendarofexibition.controller.commands.Command;
-import com.calendarofexibition.exceptions.RegistrationException;
 import com.calendarofexibition.model.entity.Consumer;
 import com.calendarofexibition.service.ServiceFactory;
 import com.calendarofexibition.service.interfeices.ConsumerService;
@@ -13,11 +12,10 @@ import javax.servlet.http.HttpSession;
 
 public class RegistrationCommand implements Command {
 
-
     private final static Logger LOGGER = Logger.getLogger(RegistrationCommand.class);
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws RegistrationException {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) {
 
         ConsumerService consumerService = ServiceFactory.getInstance().getConsumerService();
 
@@ -33,14 +31,9 @@ public class RegistrationCommand implements Command {
         String phoneNumber = req.getParameter("phoneNumber");
         Consumer consumer = new Consumer(role, login, password, isAvailable, name, surname,
                 spentMoney, discount, email, phoneNumber);
-        System.out.println("registrationCommand: Consumer:"+consumer);
-    /*    if(consumerService.checkUser(login)){
-            throw new RegistrationException("This login already exist!");
-        }*/
-
         Integer id = consumerService.createConsumer(consumer);
-        System.out.println("registrationCommand: ConsumerId" + id);
         consumer.setId(id);
+
         HttpSession session = req.getSession();
         session.setAttribute("user", consumer);
 

@@ -6,9 +6,10 @@ import java.util.Map;
 
 public class ControllerHelper {
 
-    private static ControllerHelper instance;
+    private static volatile ControllerHelper instance;
     private Map<String, Command> commandsMap = new HashMap<>();
-    ControllerHelper() {
+
+    private ControllerHelper() {
         commandsMap.put("index", new IndexPageCommand());
         commandsMap.put("events", new GetAllEventsPageCommand());
         commandsMap.put("profile", new ConsumerPageCommand());
@@ -22,27 +23,20 @@ public class ControllerHelper {
 
     public static ControllerHelper getInstance() {
         if (instance == null) {
-            instance = new ControllerHelper();
+            synchronized (ControllerHelper.class){
+                if (instance == null) {
+                    instance = new ControllerHelper();
+                }
+            }
         }
         return instance;
     }
 
     public Command defineCommand(String commandKey) {
-        System.out.println("command: " + commandKey);
         Command command = commandsMap.get(commandKey);
-        System.out.println("helper, command: "+command);
         if (command == null) {
             command = commandsMap.get("index");
         }
         return command;
     }
-
-   /* public Map<String, String> extractParameters(HttpServletRequest request) {
-        Map<String, String> requestParameters = new HashMap<>();
-        List<String> parameters = Collections.list(request.getParameterNames());
-        for (String param : parameters) {
-            requestParameters.put(param, request.getParameter(param));
-        }
-        return requestParameters;
-    }*/
 }

@@ -13,5 +13,5 @@ public interface OrderService {
 
     int getTicketIdByTicket(Ticket ticket);
 
-    List<Ticket> getAllTicketsForConsumer();
+    List<Ticket> getAllTicketsForConsumer(Integer consumerId);
 }

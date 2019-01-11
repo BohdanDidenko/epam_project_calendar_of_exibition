@@ -11,32 +11,28 @@ import javax.servlet.http.HttpServletResponse;
 
 public class LoginCommand implements Command {
 
-    private final static Logger LOGGER = Logger.getLogger(GetAllEventsPageCommand.class);
+    private final static Logger LOGGER = Logger.getLogger(LoginCommand.class);
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
 
         ConsumerService consumerService = ServiceFactory.getInstance().getConsumerService();
 
-        User user =  consumerService.getUser(request.getParameter("login"), request.getParameter("password"));
-
+        User user =  consumerService.getUser(request.getParameter("login"),
+                request.getParameter("password"));
         if (user != null && user.getRole().equals("consumer")) {
             request.getSession().setAttribute("user", user);
-            return PagesManager.getProperty("path.page.consumerPage");
-
+            return new ConsumerPageCommand().execute(request, response);
         }
 
         else if (user != null && user.getRole().equals("admin")) {
             request.getSession().setAttribute("user", user);
             return PagesManager.getProperty("path.page.adminPage");
-
         }
 
         else {
-            return PagesManager.getProperty("path.page.login");
+            request.setAttribute("message", "Wrong login or password");
+            return PagesManager.getProperty("path.page.loginPage");
         }
-
-//        LOGGER.info(this.getClass().getSimpleName() + " executed");
-//        return page;
     }
 }

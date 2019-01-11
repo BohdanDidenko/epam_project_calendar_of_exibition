@@ -14,8 +14,7 @@ create table users
   constraint users_UserLogin_uindex
   unique (UserLogin)
 );
-)
-  ENGINE = InnoDB;
+
 
 /*CREATE TABLE consumers*/
 create table consumers
@@ -117,7 +116,7 @@ SELECT * FROM consumers WHERE UserId IN (SELECT UserId FROM users
 WHERE UserLogin = 'consumer' and UserPassword = 'consumer');
 
 INSERT INTO calendarofexposition.users (UserRole, UserLogin, UserPassword, isActive) VALUES ('consumer', ?, ?, 1);
-INSERT INTO calendarofexposition.consumers(UserId, name, surname, spendMoney, discount, email, phoneNumber) VALUES (());
+INSERT INTO calendarofexposition.consumers(UserId, name, surname, spendMoney, discount, email, phoneNumber) VALUES ();
 
 START TRANSACTION;
 INSERT INTO users (UserRole, UserLogin, UserPassword, IsActive)
@@ -133,6 +132,122 @@ SELECT * FROM users WHERE UserLogin = ? and UserPassword = ?;
 
 INSERT INTO orders (consumerId, ticketId) VALUES (?,?);
 INSERT INTO tickets (key, eventId) VALUES (?, ?);
-INSERT INTO `calendarofexposition`.`tickets` (`key`, `eventId`) VALUES (?,?)
+INSERT INTO `calendarofexposition`.`tickets` (`key`, `eventId`) VALUES (?,?);
 
-SELECT tikcetId FROM tickets WHERE tickets.key = ?
+SELECT tikcetId FROM tickets WHERE tickets.key = ?;
+
+
+
+
+
+-- auto-generated definition
+create table users
+(
+  UserId       int auto_increment
+    primary key,
+  UserRole     varchar(10) not null,
+  UserLogin    varchar(30) not null,
+  UserPassword varchar(20) not null,
+  IsActive     tinyint(1)  not null,
+  constraint users_UserId_uindex
+  unique (UserId),
+  constraint users_UserLogin_uindex
+  unique (UserLogin)
+);
+-- auto-generated definition
+create table consumers
+(
+  UserId      int         not null,
+  name        varchar(30) not null,
+  surname     varchar(30) null,
+  spendMoney  double      null,
+  discount    double      null,
+  email       varchar(30) not null,
+  phoneNumber varchar(20) null,
+  constraint consumers_UserId_uindex
+  unique (UserId),
+  constraint consumers_email_uindex
+  unique (email),
+  constraint consumers_phoneNumber_uindex
+  unique (phoneNumber),
+  constraint consumerId
+  foreign key (UserId) references users (UserId)
+);
+
+-- auto-generated definition
+create table events
+(
+  eventId       int auto_increment
+    primary key,
+  title         varchar(40)   not null,
+  theme         varchar(40)   null,
+  startDate     date          not null,
+  endDate       date          not null,
+  price         double        not null,
+  pathToPicture varchar(40)   null,
+  description   varchar(2000) null,
+  hallid        int           not null,
+  constraint Events_eventId_uindex
+  unique (eventId)
+);
+
+-- auto-generated definition
+create table tickets
+(
+  ticketId int auto_increment
+    primary key,
+  `key`    varchar(35) not null,
+  eventId  int         not null,
+  constraint ticket_ticketId_uindex
+  unique (ticketId),
+  constraint Ticket_FK
+  foreign key (eventId) references events (eventId)
+);
+
+create index Ticket_FK
+  on tickets (eventId);
+
+-- auto-generated definition
+create table expohalls
+(
+  hallId      int auto_increment
+    primary key,
+  name        varchar(30) not null,
+  isAvailable tinyint(1)  not null,
+  freePlaces  int         not null,
+  constraint ExplHalls_hallId_uindex
+  unique (hallId)
+);
+
+-- auto-generated definition
+create table expohalls
+(
+  hallId      int auto_increment
+    primary key,
+  name        varchar(30) not null,
+  isAvailable tinyint(1)  not null,
+  freePlaces  int         not null,
+  constraint ExplHalls_hallId_uindex
+  unique (hallId)
+);
+
+-- auto-generated definition
+create table orders
+(
+  orderId    int auto_increment
+    primary key,
+  consumerId int not null,
+  ticketId   int not null,
+  constraint Order_orderId_uindex
+  unique (orderId),
+  constraint orderconsumerId
+  foreign key (consumerId) references consumers (UserId),
+  constraint OrderTicketId
+  foreign key (ticketId) references tickets (ticketId)
+);
+
+create index OrderTicketId
+  on orders (ticketId);
+
+create index orderconsumerId
+  on orders (consumerId);

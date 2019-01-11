@@ -27,10 +27,6 @@ public class FactoryDAO {
         return instance;
     }
 
-    public static void setInstance(FactoryDAO instance) {
-        FactoryDAO.instance = instance;
-    }
-
     /**
      * @return instance of concrete UserDAO implementation.
      */
@@ -38,14 +34,23 @@ public class FactoryDAO {
         return UserDAOImpl.getInstance();
     }
 
+    /**
+     * @return instance of concrete EventDAO implementation.
+     */
     public EventDAO getEventDAO() {
-        return new EventDAOImpl();
+        return EventDAOImpl.getInstance();
     }
 
+    /**
+     * @return instance of concrete ExpoHallDAO implementation.
+     */
     public ExpoHallDAO getExpoHallDAO() {
-        return new ExpoHallDAOImpl();
+        return ExpoHallDAOImpl.getInstance();
     }
 
+    /**
+     * @return instance of concrete OrderDAO implementation.
+     */
     public OrderDAO getOrderDAO() {
         return OrderDAOImpl.getInstance();
     }

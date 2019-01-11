@@ -3,7 +3,6 @@ package com.calendarofexibition.model;
 import com.calendarofexibition.model.entity.Event;
 
 import java.io.Serializable;
-import java.util.GregorianCalendar;
 
 public class Ticket implements Serializable {
     private Integer ticketId;
@@ -13,8 +12,7 @@ public class Ticket implements Serializable {
     public Ticket() {
     }
 
-    public Ticket(Integer ticketId, String key, Event event) {
-        this.ticketId = ticketId;
+    public Ticket(String key, Event event) {
         this.key = key;
         this.event = event;
     }
@@ -83,6 +81,7 @@ public class Ticket implements Serializable {
                 ", price=" + event.getPrice() +
                 ", title=" + event.getTitle() +
                 ", theme=" + event.getTheme() +
+                this.getEvent().toString()+
                 '}';
     }
 }

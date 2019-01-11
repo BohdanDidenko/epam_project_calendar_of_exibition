@@ -66,7 +66,6 @@ public abstract class User implements Serializable {
         isAvailable = available;
     }
 
-    // todo override this method
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -81,7 +80,6 @@ public abstract class User implements Serializable {
         return getPassword() != null ? getPassword().equals(user.getPassword()) : user.getPassword() == null;
     }
 
-    // todo override this method
     @Override
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
@@ -91,7 +89,6 @@ public abstract class User implements Serializable {
         return result;
     }
 
-    // todo override this method
     @Override
     public String toString() {
         return this.getClass().getSimpleName() + "{" +

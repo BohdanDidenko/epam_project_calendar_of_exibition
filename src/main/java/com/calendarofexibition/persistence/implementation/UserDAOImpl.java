@@ -8,24 +8,17 @@ import java.sql.*;
 
 public class UserDAOImpl implements UserDAO {
     private static volatile UserDAOImpl instance;
-    private FactoryConnection factoryConnection;
+    private static FactoryConnection factoryConnection;
     private final static Logger LOGGER = Logger.getLogger(UserDAOImpl.class);
-    private static final int ID = 1;
-    private static final int ROLE = 2;
-    private static final int FIRST_NAME = 2;
-    private static final int LAST_NAME = 3;
-    private static final int LOGIN = 4;
-    private static final int PASSWORD = 5;
-    private static final int EMAIL = 7;
     private static final String GET_CONSUMER_BY_ID = "SELECT * FROM consumers WHERE UserId = ?";
     private static String GET_CONSUMER = "SELECT * FROM consumers WHERE UserId IN (SELECT UserId FROM users WHERE UserLogin = ";
     private static final String GET_USER = "SELECT * FROM users WHERE UserLogin = ? and UserPassword = ?";
     private static final String GET_USER_BY_ID = "SELECT * FROM users WHERE UserId = ?";
     private static final String GET_USER_ISACTIVE = "SELECT isActive FROM users WHERE (username, password) VALUES (?,?)";
     private static final String INSERT_USER = "INSERT INTO users (UserRole, UserLogin, UserPassword, IsActive)"+
-    "VALUES('consumer', ?, ?, 1)";
+            "VALUES('consumer', ?, ?, 1)";
     private static final String INSERT_CONSUMER = "INSERT INTO consumers (userid, name, surname, spendMoney, discount, email, phoneNumber)"+
-    "VALUES(LAST_INSERT_ID(), ?, ?, ?, ?, ?, ?)";
+            "VALUES(LAST_INSERT_ID(), ?, ?, ?, ?, ?, ?)";
     private static final String UPDATE_ACCOUNT = "UPDATE consumers SET name, surname, spendMoney, discount, email, phoneNumber" +
             " WHERE userId  VALUES (?, ?, ?, ?, ?, ?, ?)";
     private static final String FIND_LOGIN = "SELECT * FROM users WHERE login = ?";
@@ -53,17 +46,11 @@ public class UserDAOImpl implements UserDAO {
             ps.setString(1, login);
             ps.setString(2, password);
             ResultSet rs = ps.executeQuery();
-//            String role = rs.getString(2);
-//            if(role.equals("consumer")){
-//
-//            }
-//            else if(role.equals("admin")){
-//
-//            }
             if (rs.next()) {
                 user.setId(rs.getInt(1));
                 user.setRole(rs.getString(2));
-            }
+            } else
+                return null;
         } catch (SQLException e) {
             LOGGER.error("SQLException was occurred in " + getClass().getSimpleName(), e);
         }
@@ -95,7 +82,11 @@ public class UserDAOImpl implements UserDAO {
         try (Connection connection = factoryConnection.getConnection();
              PreparedStatement psConsumer = connection.prepareStatement(GET_CONSUMER)) {
             ResultSet rsConsumer = psConsumer.executeQuery();
-            consumer = consumerHelper(rsConsumer);
+            if(rsConsumer.next()){
+                consumer = consumerHelper(rsConsumer);
+            }
+            else
+                return null;
         } catch (SQLException e) {
             LOGGER.error("SQLException was occurred in " + getClass().getSimpleName(), e);
         }
@@ -106,12 +97,11 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public Consumer getConsumer(int id){
         Consumer consumer = new Consumer();
-
         try (Connection connection = factoryConnection.getConnection();
              PreparedStatement psConsumer = connection.prepareStatement(GET_CONSUMER_BY_ID)) {
             psConsumer.setInt(1, id);
             ResultSet rsConsumer = psConsumer.executeQuery();
-           consumer = consumerHelper(rsConsumer);
+            consumer = consumerHelper(rsConsumer);
         } catch (SQLException e) {
             LOGGER.error("SQLException was occurred in " + getClass().getSimpleName(), e);
         }
@@ -121,46 +111,43 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public Integer createConsumer(Consumer consumer) {
-            Integer id = null;
-            User user = null;
-            try (Connection connection = factoryConnection.getConnection();
-                PreparedStatement ps1 = connection.prepareStatement(INSERT_USER);
-                PreparedStatement ps2 = connection.prepareStatement(INSERT_CONSUMER)) {
+        Integer id = null;
+        try (Connection connection = factoryConnection.getConnection();
+             PreparedStatement ps1 = connection.prepareStatement(INSERT_USER);
+             PreparedStatement ps2 = connection.prepareStatement(INSERT_CONSUMER)) {
+            ps1.setString(1, consumer.getLogin());
+            ps1.setString(2, consumer.getPassword());
+            ps2.setString(1, consumer.getName());
+            ps2.setString(2, consumer.getSurname());
+            ps2.setDouble(3, consumer.getSpentMoney());
+            ps2.setDouble(4, consumer.getDiscount());
+            ps2.setString(5, consumer.getEmail());
+            ps2.setString(6, consumer.getPhoneNumber());
+            connection.setAutoCommit(false);
 
-                ps1.setString(1, consumer.getLogin());
-                ps1.setString(2, consumer.getPassword());
-
-                ps2.setString(1, consumer.getName());
-                ps2.setString(2, consumer.getSurname());
-                ps2.setDouble(3, consumer.getSpentMoney());
-                ps2.setDouble(4, consumer.getDiscount());
-                ps2.setString(5, consumer.getEmail());
-                ps2.setString(6, consumer.getPhoneNumber());
-                connection.setAutoCommit(false);
-                try{
-                    ps1.executeUpdate();
-                }
-                catch (SQLException e){
-                    e.printStackTrace();
-                    connection.rollback();
-                    System.out.println("1st request rollback");
-                   return -1;
-                }
-                try{
-                    id = ps2.executeUpdate();
-                    System.out.println("id: " + id);
-                   connection.commit();
-                }
-                catch (SQLException e){
-                    connection.rollback();
-                    LOGGER.error("SQLException was occurred in " + getClass().getSimpleName(), e);
-                    return -1;
-                }
-
-            } catch (SQLException e) {
-                LOGGER.error("SQLException was occurred in " + getClass().getSimpleName(), e);
+            try{
+                ps1.executeUpdate();
             }
-            LOGGER.info("Consumer was successfully added");
+            catch (SQLException e){
+                connection.rollback();
+                LOGGER.error("SQLException was occurred in " + getClass().getSimpleName(), e);
+                return -1;
+            }
+
+            try{
+                id = ps2.executeUpdate();
+                connection.commit();
+            }
+            catch (SQLException e){
+                connection.rollback();
+                LOGGER.error("SQLException was occurred in " + getClass().getSimpleName(), e);
+                return -1;
+            }
+
+        } catch (SQLException e) {
+            LOGGER.error("SQLException was occurred in " + getClass().getSimpleName(), e);
+        }
+        LOGGER.info("Consumer was successfully added");
         return id;
     }
 
@@ -169,7 +156,7 @@ public class UserDAOImpl implements UserDAO {
     public Boolean updateConsumer(Consumer consumer) {
         boolean flag = false;
         try (Connection connection = factoryConnection.getConnection();
-            PreparedStatement ps = connection.prepareStatement(UPDATE_ACCOUNT)) {
+             PreparedStatement ps = connection.prepareStatement(UPDATE_ACCOUNT)) {
             ps.setString(1, consumer.getName());
             ps.setString(2, consumer.getSurname());
             ps.setDouble(3, consumer.getSpentMoney());
@@ -194,7 +181,6 @@ public class UserDAOImpl implements UserDAO {
             ps.setString(1, login);
             ResultSet rs = ps.executeQuery();
             exist = rs.next();
-
         } catch (SQLException e) {
             LOGGER.error("SQLException occurred in " + getClass().getSimpleName(), e);
         }

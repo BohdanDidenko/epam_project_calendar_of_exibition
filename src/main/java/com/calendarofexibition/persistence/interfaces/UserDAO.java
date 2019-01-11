@@ -12,7 +12,6 @@ public interface UserDAO {
      * @param UserId    Consumer's Id in database
      * @return Cunsumer found in database with requested login and password
      */
-
     User getUser(Integer UserId);
 
     /**
@@ -26,7 +25,6 @@ public interface UserDAO {
      * @param id Consumer's id
      * @return Cunsumer found in database with User's id
      */
-
     Consumer getConsumer(int id);
 
     /**
@@ -53,5 +51,4 @@ public interface UserDAO {
      * @return boolean result of operation success
      */
     Boolean isExist(String login);
-
 }

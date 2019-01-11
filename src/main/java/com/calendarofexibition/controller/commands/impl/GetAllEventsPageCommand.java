@@ -13,16 +13,16 @@ import com.calendarofexibition.controller.commands.*;
 
 public class GetAllEventsPageCommand implements Command {
 
-        private final static Logger LOGGER = Logger.getLogger(GetAllEventsPageCommand.class);
+    private final static Logger LOGGER = Logger.getLogger(GetAllEventsPageCommand.class);
 
-        @Override
-        public String execute(HttpServletRequest request, HttpServletResponse response) {
+    @Override
+    public String execute(HttpServletRequest request, HttpServletResponse response) {
+        EventService eventService = ServiceFactory.getInstance().getEventService();
 
-            EventService eventService = ServiceFactory.getInstance().getEventService();
+        List<Event> listAllEvents =  eventService.getAllEvents();
 
-            List<Event> listAllEvents =  eventService.getAllExpositions();
-            request.setAttribute("events", listAllEvents);
-            LOGGER.info(this.getClass().getSimpleName() + " executed");
-            return PagesManager.getProperty("path.page.events");
-        }
+        request.setAttribute("events", listAllEvents);
+        LOGGER.info(this.getClass().getSimpleName() + " executed");
+        return PagesManager.getProperty("path.page.events");
     }
+}

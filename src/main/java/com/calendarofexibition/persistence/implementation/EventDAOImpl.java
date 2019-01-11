@@ -9,6 +9,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class EventDAOImpl implements EventDAO {
+    private static volatile EventDAOImpl instance;
+    private static FactoryConnection factoryConnection;
     private static final String GET_ALL_EVENTS = "SELECT * FROM events";
     private static final String GET_ALL_BY_THEME = "SELECT * FROM events WHERE theme = ?";
     private static final String GET_COUNT_BY_THEME = "SELECT SUM(title) WHERE theme AS count VALUE (?)";
@@ -20,11 +22,19 @@ public class EventDAOImpl implements EventDAO {
     private static final String UPDATE_EVENT = "UPDATE events SET title, theme, startDate, endDate, price" +
                                                             "pathToPicture (?, ?, ?, ?, ?, ?)";
     private static final String DELETE_EVENT = "DELETE FROM events WHERE EventId VALUES (?)";
-    private FactoryConnection factoryConnection;
     private final static Logger LOGGER = Logger.getLogger(UserDAOImpl.class);
 
-    public EventDAOImpl() {
-        this.factoryConnection = FactoryConnection.getInstance();
+    private EventDAOImpl() { factoryConnection = FactoryConnection.getInstance();}
+
+    public static EventDAOImpl getInstance() {
+        if (instance == null) {
+            synchronized (EventDAOImpl.class){
+                if(instance == null){
+                    instance = new EventDAOImpl();
+                }
+            }
+        }
+        return instance;
     }
 
     @Override
@@ -60,7 +70,7 @@ public class EventDAOImpl implements EventDAO {
         } catch (SQLException e) {
             LOGGER.error("SQLException was occurred in " + getClass().getSimpleName(), e);
         }
-        LOGGER.info("List of Events by theme was received from DB");
+        LOGGER.info("List of Events was received from DB by theme");
         return list;
     }
 
@@ -77,7 +87,7 @@ public class EventDAOImpl implements EventDAO {
         } catch (SQLException e) {
             LOGGER.error("SQLException was occurred in " + getClass().getSimpleName(), e);
         }
-        LOGGER.info("Amount of by theme was received from DB");
+        LOGGER.info("Amount of theme was received from DB");
         return result;
     }
 
@@ -94,7 +104,7 @@ public class EventDAOImpl implements EventDAO {
         } catch (SQLException e) {
             LOGGER.error("SQLException was occurred in " + getClass().getSimpleName(), e);
         }
-        LOGGER.info("Event was found in DB");
+        LOGGER.info("Event was found in DB by id");
         return event;
     }
 
@@ -158,7 +168,7 @@ public class EventDAOImpl implements EventDAO {
         } catch (SQLException e) {
 
         }
-        LOGGER.info("Event was added  in DB");
+        LOGGER.info("Event was added in DB");
         return event;
     }
 
@@ -179,7 +189,7 @@ public class EventDAOImpl implements EventDAO {
         } catch (SQLException e) {
             LOGGER.error("SQLException was occurred in " + getClass().getSimpleName(), e);
         }
-        LOGGER.info("Event was found in DB");
+        LOGGER.info("Event was updated in DB");
         return result;
     }
 
@@ -194,7 +204,7 @@ public class EventDAOImpl implements EventDAO {
         } catch (SQLException e) {
             LOGGER.error("SQLException was occurred in " + getClass().getSimpleName(), e);
         }
-        LOGGER.info("Event whit id: " + eventId+"was deleted");
+        LOGGER.info("Event whit id: " + eventId + "was deleted");
         return result;
     }
 

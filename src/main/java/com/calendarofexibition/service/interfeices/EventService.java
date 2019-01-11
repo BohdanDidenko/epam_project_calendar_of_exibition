@@ -25,7 +25,6 @@ public interface EventService {
      * @param id id of event
      * @return event
      */
-
     Event getEventById(int id);
 
     /**
@@ -33,9 +32,5 @@ public interface EventService {
      *
      * @return List of Events
      */
-
-    List<Event> getAllExpositions();
-
-
-
+    List<Event> getAllEvents();
 }

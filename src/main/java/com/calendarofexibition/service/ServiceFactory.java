@@ -10,10 +10,8 @@ import com.calendarofexibition.service.interfeices.OrderService;
 
 public class ServiceFactory {
     private static volatile ServiceFactory instance;
-    private FactoryDAO factoryDAO;
 
     private ServiceFactory() {
-        factoryDAO = FactoryDAO.getInstance();
     }
 
     public static ServiceFactory getInstance(){

@@ -12,8 +12,7 @@ public interface OrderDAO {
      * Get all consumer's tickets
      * @return list of tickets for special consumer
      */
-
-    List<Ticket> getAllTicketsForConsumer();
+    List<Ticket> getAllTicketsForConsumer(Integer consumerId);
 
     /**
      * Get ticket's id by ticket

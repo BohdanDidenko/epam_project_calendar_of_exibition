@@ -17,15 +17,6 @@ public class Order implements Serializable {
         this.ticket = ticket;
     }
 
-    public Order(Integer orderId, Consumer consumer,
-                 Ticket ticket) {
-        OrderId = orderId;
-        this.consumer = consumer;
-        this.ticket = ticket;
-    }
-
-
-
     public Integer getOrderId() {
         return OrderId;
     }

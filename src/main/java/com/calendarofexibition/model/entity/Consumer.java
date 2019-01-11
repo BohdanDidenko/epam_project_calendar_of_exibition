@@ -8,19 +8,7 @@ public class Consumer extends User{
     private String email;
     private String phoneNumber;
 
-
     public Consumer() {
-    }
-
-    public Consumer(Integer id, String role, String login, String password, Boolean isAvailable, String name,
-                    String surname, Double spentMoney, Double discount, String email, String phoneNumber) {
-        super(id, role, login, password, isAvailable);
-        this.name = name;
-        this.surname = surname;
-        this.spentMoney = spentMoney;
-        this.discount = discount;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
     }
 
     public Consumer(String role, String login, String password, Boolean isAvailable, String name, String surname,

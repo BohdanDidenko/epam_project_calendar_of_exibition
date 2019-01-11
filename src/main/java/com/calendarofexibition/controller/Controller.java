@@ -13,6 +13,7 @@ import java.io.IOException;
 import com.calendarofexibition.controller.commands.*;
 
 public class Controller extends HttpServlet {
+
     private final static Logger LOGGER = Logger.getLogger(UserDAOImpl.class);
 
     @Override
@@ -27,15 +28,12 @@ public class Controller extends HttpServlet {
 
     private void  processing (HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         LOGGER.info(this.getClass().getSimpleName() + " processing new request");
-        String page = "";
-
-
-        String parameter = req.getParameter("command");
 
         ControllerHelper controllerHelper = ControllerHelper.getInstance();
-
+        String parameter = req.getParameter("command");
         Command command = controllerHelper.defineCommand(parameter);
 
+        String page = "";
         try {
             page = command.execute(req, resp);
         } catch (RegistrationException e) {
@@ -43,7 +41,6 @@ public class Controller extends HttpServlet {
             RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(PagesManager.getProperty("path.page.login"));
             dispatcher.forward(req, resp);
         }
-        System.out.println(page);
 
         RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(page);
         dispatcher.forward(req, resp);
